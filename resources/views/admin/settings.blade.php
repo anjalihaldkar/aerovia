@@ -29,17 +29,17 @@
               
               <div class="form-group">
                 <label class="field-label">Mobile / Phone Number</label>
-                <input type="text" id="setting-phone" name="phone" class="field-input" placeholder="e.g. +91 62890 06014" value="{{ $settings->phone ?? '' }}">
+                <input type="tel" id="setting-phone" name="phone" class="field-input" placeholder="e.g. +91 62890 06014" value="{{ $settings->phone ?? '' }}" required pattern="^\+?[0-9\s\-]{10,20}$" title="Please enter a valid phone number (minimum 10 digits).">
               </div>
 
               <div class="form-group">
                 <label class="field-label">Email Address</label>
-                <input type="email" id="setting-email" name="email" class="field-input" placeholder="e.g. info@aeroviaexpeditions.com" value="{{ $settings->email ?? '' }}">
+                <input type="email" id="setting-email" name="email" class="field-input" placeholder="e.g. info@aeroviaexpeditions.com" value="{{ $settings->email ?? '' }}" required>
               </div>
 
               <div class="form-group form-group-full">
                 <label class="field-label">Office Address</label>
-                <input type="text" id="setting-address" name="address" class="field-input" placeholder="e.g. 127A Park Street, Kolkata - 700016" value="{{ $settings->address ?? '' }}">
+                <input type="text" id="setting-address" name="address" class="field-input" placeholder="e.g. 127A Park Street, Kolkata - 700016" value="{{ $settings->address ?? '' }}" required minlength="10" title="Please enter a complete office address (minimum 10 characters).">
               </div>
 
             </div>

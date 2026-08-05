@@ -25,9 +25,9 @@ class SettingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string',
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9\s\-]{10,20}$/'],
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|min:10',
             'fb' => 'nullable|url|max:255',
             'linkedin' => 'nullable|url|max:255',
             'instagram' => 'nullable|url|max:255',
