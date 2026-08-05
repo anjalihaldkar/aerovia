@@ -47,7 +47,8 @@ Route::get('/tour-description', function () {
 
 Route::get('/contact', function () {
     return view('contact');
-});
+})->name('contact');
+Route::post('/contact', [App\Http\Controllers\Admin\ContactLeadController::class, 'store'])->name('contact.store');
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TourController;
@@ -89,5 +90,8 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/banner-details', [BannerController::class, 'index'])->name('admin.banner-details');
         Route::post('/banner-details', [BannerController::class, 'store'])->name('admin.banners.store');
+
+        Route::get('/leads', [App\Http\Controllers\Admin\ContactLeadController::class, 'index'])->name('admin.leads.index');
+        Route::delete('/leads/{id}', [App\Http\Controllers\Admin\ContactLeadController::class, 'destroy'])->name('admin.leads.destroy');
     });
 });

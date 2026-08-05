@@ -42,6 +42,7 @@
       <a href="{{ url('admin/banner-details') }}" class="menu-link {{ request()->is('admin/banner-details') ? 'active' : '' }}"><i class="fas fa-images"></i> Banner Details</a>
       <a href="{{ url('admin/testimonials') }}" class="menu-link {{ request()->is('admin/testimonials') ? 'active' : '' }}"><i class="fas fa-comment-dots"></i> Testimonials</a>
       <a href="{{ url('admin/settings') }}" class="menu-link {{ request()->is('admin/settings') ? 'active' : '' }}"><i class="fas fa-cog"></i> Settings</a>
+      <a href="{{ route('admin.leads.index') }}" class="menu-link {{ request()->routeIs('admin.leads.index') ? 'active' : '' }}"><i class="fas fa-envelope-open-text"></i> Contact Leads</a>
       <a href="{{ url('tours') }}" class="menu-link" target="_blank"><i class="fas fa-globe"></i> View Live Site</a>
       <a href="{{ url('/') }}" class="menu-link"><i class="fas fa-arrow-left"></i> Main Site Home</a>
     </nav>
