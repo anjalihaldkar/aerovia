@@ -13,8 +13,9 @@ class BannerController extends Controller
     {
         $settings = Gallery::pluck('value', 'key')->toArray();
         $sceneryList = isset($settings['scenery_images']) ? json_decode($settings['scenery_images'], true) : [];
+        $tours = \App\Models\Tour::all();
         
-        return view('admin.banner-details', compact('settings', 'sceneryList'));
+        return view('admin.banner-details', compact('settings', 'sceneryList', 'tours'));
     }
 
     public function store(Request $request)

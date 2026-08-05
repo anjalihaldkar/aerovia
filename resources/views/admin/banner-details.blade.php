@@ -145,7 +145,7 @@
           <div class="form-panel">
             <div class="editor-card-header">
               <h3 class="form-section-title" style="border: none; margin: 0; padding: 0;"><i class="fas fa-mountain"></i> Scenery & Landscapes Section Images</h3>
-              <button type="button" class="btn-add-item" onclick="addNewSceneryItem()" style="margin: 0;"><i class="fas fa-plus"></i> Add Scenery Slide</button>
+              <button type="button" class="btn-add-item" onclick="openTourModal()" style="margin: 0;"><i class="fas fa-plus"></i> Add Scenery Slide</button>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1.5rem;">
               These custom landscape images will show in the infinite marquee slider on the home page.
@@ -167,6 +167,25 @@
       <h3>Assets Updated Successfully!</h3>
       <p id="publish-modal-desc">The chosen header banner images and background video files have been simulated as uploaded and saved successfully.</p>
       <button class="btn btn-primary btn-centered" onclick="closeModal()">Close Panel</button>
+    </div>
+  </div>
+
+  <!-- Tour Selection Modal -->
+  <div class="modal-overlay" id="tour-select-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="modal-card" style="max-width: 500px; width: 100%; padding: 2rem; background: #1a1a24; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-xl);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0; color: #FFF; font-size: 1.35rem;"><i class="fas fa-route" style="color: var(--star-gold); margin-right: 0.50rem;"></i> Select Tour Package</h3>
+        <button type="button" onclick="closeTourModal()" style="background: none; border: none; color: #FFF; font-size: 1.25rem; cursor: pointer; outline: none;"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 350px; overflow-y: auto; padding-right: 5px;">
+        @foreach($tours as $t)
+          <div onclick="selectTourForScenery('{{ addslashes($t->title) }}', '{{ $t->duration }} Expedition')" style="padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.08)'; this.style.borderColor='var(--star-gold)';" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.08)';">
+            <span style="font-weight: 600; color: #FFF;">{{ $t->title }}</span>
+            <span style="font-size: 0.8rem; color: var(--star-gold); background: rgba(229,184,66,0.1); padding: 0.25rem 0.6rem; border-radius: var(--radius-full); font-weight: 600;">{{ $t->duration }}</span>
+          </div>
+        @endforeach
+      </div>
     </div>
   </div>
 
@@ -232,4 +251,17 @@
           });
       }
   });
+
+  function openTourModal() {
+      document.getElementById('tour-select-modal').style.display = 'flex';
+  }
+
+  function closeTourModal() {
+      document.getElementById('tour-select-modal').style.display = 'none';
+  }
+
+  function selectTourForScenery(title, subtitle) {
+      closeTourModal();
+      addNewSceneryItem(title, subtitle);
+  }
 </script>
