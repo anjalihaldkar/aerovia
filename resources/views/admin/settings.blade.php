@@ -54,7 +54,7 @@
                 <label class="field-label">Facebook Profile Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-facebook-f social-brand-icon"></i>
-                  <input type="text" id="setting-fb" name="fb" class="field-input" placeholder="https://www.facebook.com/username" value="{{ $settings->fb ?? '' }}">
+                  <input type="url" id="setting-fb" name="fb" class="field-input" placeholder="https://www.facebook.com/username" value="{{ $settings->fb ?? '' }}">
                 </div>
               </div>
 
@@ -62,7 +62,7 @@
                 <label class="field-label">LinkedIn Page Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-linkedin-in social-brand-icon"></i>
-                  <input type="text" id="setting-linkedin" name="linkedin" class="field-input" placeholder="https://www.linkedin.com/company/username" value="{{ $settings->linkedin ?? '' }}">
+                  <input type="url" id="setting-linkedin" name="linkedin" class="field-input" placeholder="https://www.linkedin.com/company/username" value="{{ $settings->linkedin ?? '' }}">
                 </div>
               </div>
 
@@ -70,7 +70,7 @@
                 <label class="field-label">Instagram Username Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-instagram social-brand-icon"></i>
-                  <input type="text" id="setting-instagram" name="instagram" class="field-input" placeholder="https://www.instagram.com/username" value="{{ $settings->instagram ?? '' }}">
+                  <input type="url" id="setting-instagram" name="instagram" class="field-input" placeholder="https://www.instagram.com/username" value="{{ $settings->instagram ?? '' }}">
                 </div>
               </div>
 
@@ -78,7 +78,7 @@
                 <label class="field-label">WhatsApp Number (For Click-to-Chat - digits only, country code included)</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-whatsapp social-brand-icon"></i>
-                  <input type="text" id="setting-whatsapp" name="whatsapp" class="field-input" placeholder="e.g. 916289006014" value="{{ $settings->whatsapp ?? '' }}">
+                  <input type="text" id="setting-whatsapp" name="whatsapp" class="field-input" placeholder="e.g. 916289006014" value="{{ $settings->whatsapp ?? '' }}" pattern="^[0-9]{10,15}$" title="Please enter a valid WhatsApp number (digits only, including country code, e.g. 916289006014)">
                 </div>
               </div>
 

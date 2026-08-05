@@ -31,7 +31,7 @@ class SettingController extends Controller
             'fb' => 'nullable|url|max:255',
             'linkedin' => 'nullable|url|max:255',
             'instagram' => 'nullable|url|max:255',
-            'whatsapp' => 'nullable|string|max:255',
+            'whatsapp' => ['nullable', 'string', 'regex:/^[0-9]{10,15}$/'],
             'faqs' => 'nullable|array',
             'faqs.*.question' => 'required_with:faqs.*.answer|string',
             'faqs.*.answer' => 'required_with:faqs.*.question|string',
