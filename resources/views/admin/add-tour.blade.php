@@ -71,13 +71,14 @@
             <div class="form-group">
               <label class="field-label" for="tour-start-date">Start Date</label>
               <input type="date" id="tour-start-date" name="start_date"
-                value="{{ old('start_date', isset($tour) && strtotime($tour->start_date) ? date('Y-m-d', strtotime($tour->start_date)) : '') }}" class="field-input"
-                required>
+                value="{{ old('start_date', isset($tour) && strtotime($tour->start_date) ? date('Y-m-d', strtotime($tour->start_date)) : '') }}"
+                class="field-input" required>
             </div>
 
             <div class="form-group">
               <label class="field-label" for="tour-end-date">End Date</label>
-              <input type="date" id="tour-end-date" name="end_date" value="{{ old('end_date', isset($tour) && strtotime($tour->end_date) ? date('Y-m-d', strtotime($tour->end_date)) : '') }}"
+              <input type="date" id="tour-end-date" name="end_date"
+                value="{{ old('end_date', isset($tour) && strtotime($tour->end_date) ? date('Y-m-d', strtotime($tour->end_date)) : '') }}"
                 class="field-input" required>
             </div>
           </div>
@@ -133,7 +134,7 @@
                     value="{{ old('inst_deposit', $tour->inst_deposit ?? '') }}" class="field-input"
                     placeholder="e.g. 50000" min="0">
                 </div>
-                
+
                 <div class="form-group">
                   <label class="field-label">1st Installment Details</label>
                   <input type="text" id="inst-1" name="inst_1" value="{{ old('inst_1', $tour->inst_1 ?? '') }}"
@@ -331,7 +332,7 @@
           @foreach($tour->itinerary as $day)
             addNewItineraryDay("{{ addslashes($day['title'] ?? '') }}", "{{ addslashes($day['banner'] ?? '') }}", "{{ str_replace(["\r", "\n"], ['', '\n'], addslashes($day['description'] ?? '')) }}");
           @endforeach
-                                                              }
+                                                                          }
       });
     </script>
   @endif

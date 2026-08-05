@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             TestimonialSeeder::class,
             SettingSeeder::class,
+            TourSeeder::class,
         ]);
     }
 }

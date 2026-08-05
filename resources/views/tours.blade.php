@@ -103,140 +103,36 @@
 
       <!-- Tours 3-column Grid -->
       <div class="tours-grid">
-        <!-- Featured Item: Poland & Czechia -->
-        <div class="tour-card animate-card" style="border: 2px solid var(--secondary-plum);">
-          <div class="tour-card-img" style="position: relative;">
-            <span
-              style="position: absolute; top: 15px; left: 15px; background: var(--btn-gradient); color: #FFF; padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; z-index: 2;">FEATURED
-              • 15 OCT 2026</span>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Poland & Czechia">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Poland & Czechia 10D/11N</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 5.0</span>
+        @foreach($tours as $tour)
+          <div class="tour-card animate-card" style="{{ $loop->first ? 'border: 2px solid var(--secondary-plum);' : '' }}">
+            <div class="tour-card-img" style="position: relative;">
+              @if($loop->first)
+                <span
+                  style="position: absolute; top: 15px; left: 15px; background: var(--btn-gradient); color: #FFF; padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; z-index: 2;">FEATURED
+                  • {{ strtoupper(date('d M Y', strtotime($tour->start_date))) }}</span>
+              @else
+                <span
+                  style="position: absolute; top: 15px; left: 15px; background: rgba(0, 0, 0, 0.6); color: #FFF; padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; z-index: 2;">
+                  {{ strtoupper(date('d M Y', strtotime($tour->start_date))) }}</span>
+              @endif
+              <img loading="lazy" src="{{ (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) ? $tour->itinerary[0]['banner'] : 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80' }}"
+                alt="{{ $tour->title }}">
             </div>
-            <p class="tour-card-desc">Warsaw, Krakow, Czestochowa, Wadowice, Salt Mine, Zakopane & Prague. Direct
-              flights, 4★/5★ hotels & meals included.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 3,49,999</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-plum"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item 2: Uluwatu Temple, Bali -->
-        <div class="tour-card animate-card">
-          <div class="tour-card-img">
-            <img loading="lazy" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Uluwatu Temple">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Bali Sunset & Temple Retreat</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 4.8</span>
-            </div>
-            <p class="tour-card-desc">Cliffside ocean sanctuaries, Kecak dance performances, and luxury beach resort
-              stays in Bali.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 1,15,000</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-outline"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
+            <div class="tour-card-body">
+              <div class="tour-card-header">
+                <h4>{{ $tour->title }} {{ $tour->duration }}</h4>
+                <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
+                    style="color: var(--star-gold);"></i> 5.0</span>
+              </div>
+              <p class="tour-card-desc">{{ $tour->subtitle }}</p>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
+                <span class="tour-price">₹ {{ number_format((float)$tour->price_sharing, 0) }}</span>
+                <a href="{{ route('tours.show', $tour->id) }}" class="btn {{ $loop->first ? 'btn-plum' : 'btn-outline' }}"
+                  style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Item 3: Norway Fjord Odyssey -->
-        <div class="tour-card animate-card">
-          <div class="tour-card-img">
-            <img loading="lazy" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Norway Fjord">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Norway Fjord & Aurora Odyssey</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 4.9</span>
-            </div>
-            <p class="tour-card-desc">Private fjord cruises, Northern Lights chases in Tromsø, and scenic Flåm mountain
-              railway journeys.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 2,85,000</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-outline"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item 4: Swiss Alpine Wonders -->
-        <div class="tour-card animate-card">
-          <div class="tour-card-img">
-            <img loading="lazy" src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Swiss Alps">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Swiss Alps & Lake Lucerne</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 4.9</span>
-            </div>
-            <p class="tour-card-desc">Mount Titlis cable car rides, glacier walks, Lucerne lake cruises, and Zurich city
-              exploration.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 3,10,000</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-outline"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item 5: Japan Blossom & Cultural Heritage -->
-        <div class="tour-card animate-card">
-          <div class="tour-card-img">
-            <img loading="lazy" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Japan Kyoto">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Japan Cherry Blossom & Kyoto</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 4.9</span>
-            </div>
-            <p class="tour-card-desc">Bullet train experiences, Tokyo skyline views, Mount Fuji day trips, and ancient
-              Kyoto shrines.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 2,65,000</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-outline"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item 6: Angkor Wat Heritage, Cambodia -->
-        <div class="tour-card animate-card">
-          <div class="tour-card-img">
-            <img loading="lazy" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Cambodia Angkor Wat">
-          </div>
-          <div class="tour-card-body">
-            <div class="tour-card-header">
-              <h4>Angkor Wat & Mekong Wonders</h4>
-              <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-star"
-                  style="color: var(--star-gold);"></i> 4.7</span>
-            </div>
-            <p class="tour-card-desc">Sunrise at Angkor Wat, Tonle Sap floating village cruises, and traditional Khmer
-              cuisine.</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
-              <span class="tour-price">₹ 98,000</span>
-              <a href="{{ url('tour-description') }}" class="btn btn-outline"
-                style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">View Details <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
+        @endforeach
       </div>
     </section>
 

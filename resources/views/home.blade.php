@@ -204,107 +204,23 @@
         smart concierge team helps you plan the perfect adventure.</p>
 
       <div class="plans-grid">
-        <!-- Plan 1 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Poland & Czechia">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Poland & Czechia Expedition</h4>
-            <p class="plan-card-subtitle">10D/11N Luxury European Tour</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 3,49,999</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 5.0</span>
+        @foreach($tours as $tour)
+          <a href="{{ route('tours.show', $tour->id) }}" class="plan-card animate-card">
+            <div class="plan-card-img">
+              <img loading="lazy"
+                src="{{ (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) ? $tour->itinerary[0]['banner'] : 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80' }}"
+                alt="{{ $tour->title }}">
             </div>
-          </div>
-        </a>
-
-        <!-- Plan 2 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Bali Sunset">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Bali Sunset & Temple Retreat</h4>
-            <p class="plan-card-subtitle">Tropical Island Sanctuary</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 1,15,000</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 4.8</span>
+            <div class="plan-card-body">
+              <h4 class="plan-card-title">{{ $tour->title }}</h4>
+              <p class="plan-card-subtitle">{{ $tour->subtitle }}</p>
+              <div class="plan-card-footer">
+                <span class="plan-price">₹ {{ number_format((float)$tour->price_sharing, 0) }}</span>
+                <span class="plan-rating"><i class="fas fa-star" style="color: var(--star-gold);"></i> 5.0</span>
+              </div>
             </div>
-          </div>
-        </a>
-
-        <!-- Plan 3 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Norway Fjords">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Norway Fjord & Aurora Odyssey</h4>
-            <p class="plan-card-subtitle">Northern Lights & Fjord Cruise</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 2,85,000</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 4.9</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Plan 4 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Swiss Alps">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Swiss Alps & Lake Lucerne</h4>
-            <p class="plan-card-subtitle">Mount Titlis Cable Car Voyage</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 3,10,000</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 4.9</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Plan 5 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Japan Kyoto">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Japan Cherry Blossom & Kyoto</h4>
-            <p class="plan-card-subtitle">Bullet Train & Mount Fuji Trail</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 2,65,000</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 4.9</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Plan 6 -->
-        <a href="{{ url('tour-description') }}" class="plan-card animate-card">
-          <div class="plan-card-img">
-            <img loading="lazy"
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fm=webp&fit=crop&w=800&q=80"
-              alt="Cambodia Angkor Wat">
-          </div>
-          <div class="plan-card-body">
-            <h4 class="plan-card-title">Angkor Wat & Mekong Wonders</h4>
-            <p class="plan-card-subtitle">Khmer Heritage & River Cruise</p>
-            <div class="plan-card-footer">
-              <span class="plan-price">₹ 98,000</span>
-              <span class="plan-rating"><i class="fas fa-star"></i> 4.7</span>
-            </div>
-          </div>
-        </a>
+          </a>
+        @endforeach
       </div>
 
       <div style="text-align: center;">

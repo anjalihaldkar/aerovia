@@ -1,30 +1,34 @@
 @extends('layouts.app')
 
-@section('title', 'Poland & Czechia 10D/11N Luxury Expedition | Aerovia Expeditions')
-@section('meta_description', 'Join Aerovia Expeditions for an exclusive 10D/11N luxury tour of Poland & Czech Republic (Warsaw, Krakow, Prague, Zakopane) starting Oct 15, 2026. Flight inclusive.')
+@section('title', $tour->title . ' ' . $tour->duration . ' Luxury Expedition | Aerovia Expeditions')
+@section('meta_description', 'Join Aerovia Expeditions for an exclusive ' . $tour->duration . ' luxury tour of ' . $tour->title . ' starting ' . date('d M Y', strtotime($tour->start_date)) . '. Flight inclusive.')
 
 @section('content')
+    @php
+      $siteSettings = \App\Models\Setting::first();
+      $whatsappNumber = preg_replace('/[^0-9]/', '', $siteSettings->whatsapp ?? '916289006014');
+      $whatsappUrl = "https://wa.me/" . $whatsappNumber . "?text=" . urlencode("Hi Aerovia, I want to Reserve a seat for the " . $tour->title . " Tour");
+    @endphp
+
     <!-- Hero Card Banner with Background Video & Parallax -->
     <div class="hero-card-banner">
-      <img src="{{ asset('assets/images/tour-desc-hero.webp') }}" class="hero-image-bg" alt="Hero Background">
+      <img src="{{ (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) ? $tour->itinerary[0]['banner'] : 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=1920&q=80' }}" class="hero-image-bg" alt="Hero Background">
       <div class="hero-img-overlay"></div>
 
       <!-- Hero Main Content -->
       <div class="hero-body">
         <div
           style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(229, 184, 66, 0.25); border: 1px solid var(--star-gold); padding: 0.4rem 1.25rem; border-radius: var(--radius-full); font-size: 0.9rem; font-weight: 600; color: #FFF; margin-bottom: 1rem;">
-          <i class="fas fa-calendar-alt" style="color: var(--star-gold);"></i> 15 OCT - 25 OCT 2026
+          <i class="fas fa-calendar-alt" style="color: var(--star-gold);"></i> {{ strtoupper(date('d M', strtotime($tour->start_date))) }} - {{ strtoupper(date('d M Y', strtotime($tour->end_date))) }}
         </div>
-        <h1 class="hero-main-heading">Poland & Czechia<br>Expedition</h1>
-        <p class="hero-sub-text">Warsaw • Krakow • Czestochowa • Wadowice • Wieliczka Salt Mine • Zakopane • Prague •
-          Charles Bridge & Vltava River Cruise</p>
+        <h1 class="hero-main-heading">{{ $tour->title }}</h1>
+        <p class="hero-sub-text">{{ $tour->subtitle }}</p>
 
         <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-          <a href="https://wa.me/916289006014?text=Hi%20Aerovia,%20I%20want%20to%20Reserve%20a%20seat%20for%20the%20Poland%20%26%20Czechia%20Tour"
+          <a href="{{ $whatsappUrl }}"
             target="_blank" class="btn btn-whatsapp-hero" style="padding: 0.85rem 2.25rem;"><i
               class="fab fa-whatsapp"></i> Reserve Now (via WhatsApp)</a>
-          <a href="#itinerary-section" class="btn btn-pay-now" style="padding: 0.85rem 2.25rem;">View 2-Column
-            Itinerary</a>
+          <a href="#itinerary-section" class="btn btn-pay-now" style="padding: 0.85rem 2.25rem;">View Day-by-Day Itinerary</a>
           <a href="#payment-section" class="btn btn-pay-now"> Pay Now</a>
         </div>
       </div>
@@ -33,16 +37,16 @@
       <div class="hero-stats-overlay">
         <div class="stats-container">
           <div class="stat-box">
-            <h3>10D / 11N</h3>
+            <h3>{{ $tour->duration }}</h3>
             <p>Tour Duration</p>
           </div>
           <div class="stat-box">
-            <h3>4 & 5 ★</h3>
-            <p>Luxury Hotels</p>
+            <h3>{{ $tour->accommodation }}</h3>
+            <p>Hotel Comfort</p>
           </div>
           <div class="stat-box">
             <h3>FREE eSIM</h3>
-            <p>Europe Data Included</p>
+            <p>eSIM Card Included</p>
           </div>
         </div>
       </div>
@@ -52,11 +56,11 @@
     <!-- Quick Tour Highlights Bar -->
     <section class="content-section" style="padding-top: 3rem; padding-bottom: 2rem;">
       <div class="highlights-bar">
-        <div class="highlight-item"><i class="fas fa-plane-departure"></i> Flight Inclusive (LOT & IndiGo)</div>
-        <div class="highlight-item"><i class="fas fa-hotel"></i> 4★ & 5★ City Centre Hotels</div>
-        <div class="highlight-item"><i class="fas fa-utensils"></i> Daily Breakfast, Local Lunch & Dinner</div>
-        <div class="highlight-item"><i class="fas fa-wifi"></i> Free Europe eSIM Included</div>
-        <div class="highlight-item"><i class="fas fa-user-shield"></i> Dedicated Tour Director</div>
+        <div class="highlight-item"><i class="fas fa-plane-departure"></i> Flight Inclusive Package</div>
+        <div class="highlight-item"><i class="fas fa-hotel"></i> Premium Accommodations</div>
+        <div class="highlight-item"><i class="fas fa-utensils"></i> Curated Meals & Dinners</div>
+        <div class="highlight-item"><i class="fas fa-wifi"></i> Complimentary Connectivity</div>
+        <div class="highlight-item"><i class="fas fa-user-shield"></i> Professional Director</div>
       </div>
     </section>
 
@@ -70,36 +74,39 @@
         <div class="price-box-card animate-card">
           <div class="price-box-header">
             <div>
-              <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Sharing
-                Occupancy</span>
-              <div class="price-tag">₹ 3,49,999 <span>/ person</span></div>
+              <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Sharing Occupancy</span>
+              <div class="price-tag">₹ {{ number_format((float)$tour->price_sharing, 0) }} <span>/ person</span></div>
             </div>
-            <div style="text-align: right;">
-              <span style="font-size: 0.85rem; opacity: 0.85;">Single Supplement</span>
-              <div style="font-size: 1.15rem; font-weight: 700; color: var(--star-gold);">+ ₹ 42,000</div>
-            </div>
+            @if($tour->price_single)
+              <div style="text-align: right;">
+                <span style="font-size: 0.85rem; opacity: 0.85;">Single Supplement</span>
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--star-gold);">+ ₹ {{ number_format((float)$tour->price_single, 0) }}</div>
+              </div>
+            @endif
           </div>
 
           <p style="font-size: 0.92rem; opacity: 0.95; line-height: 1.5;">
-            Includes flights, 4★ & 5★ hotels, guided tours, highway transfers, entry permits, local lunches & dinners,
-            plus a complimentary Europe eSIM!
+            Includes international flight tickets, premium hotel stays, fully guided tours, comfortable highway coaches, entry tickets, lunches & dinners, plus a complimentary connectivity pack!
           </p>
 
           <div class="discount-pills">
-            <div class="discount-pill">
-              <i class="fas fa-tags" style="color: var(--star-gold);"></i>
-              ₹ 19,999 OFF for Returning Aerovia Customers
-            </div>
-            <div class="discount-pill">
-              <i class="fas fa-bolt" style="color: var(--star-gold);"></i>
-              ₹ 9,999 OFF for Early Bird Registrations (Before July 20th)
-            </div>
+            @if($tour->discount_returning)
+              <div class="discount-pill">
+                <i class="fas fa-tags" style="color: var(--star-gold);"></i>
+                {{ $tour->discount_returning }} for Returning Customers
+              </div>
+            @endif
+            @if($tour->discount_early)
+              <div class="discount-pill">
+                <i class="fas fa-bolt" style="color: var(--star-gold);"></i>
+                {{ $tour->discount_early }}
+              </div>
+            @endif
           </div>
 
           <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-            <a href="https://wa.me/916289006014?text=Hi%20Aerovia,%20I%20want%20to%20Reserve%20a%20seat%20for%20the%20Poland%20%26%20Czechia%20Tour"
-              target="_blank" class="btn btn-whatsapp-hero" style="flex: 1;"><i class="fab fa-whatsapp"></i> Reserve Now
-              on WhatsApp</a>
+            <a href="{{ $whatsappUrl }}"
+              target="_blank" class="btn btn-whatsapp-hero" style="flex: 1;"><i class="fab fa-whatsapp"></i> Reserve Now on WhatsApp</a>
             <a href="{{ url('contact') }}" class="btn btn-outline" style="color: #FFF; border-color: rgba(255,255,255,0.4);"><i
                 class="fas fa-envelope"></i> Contact Us</a>
           </div>
@@ -107,10 +114,8 @@
 
         <!-- Bank & Transfer Details Box -->
         <div class="payment-modes-card animate-card">
-          <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary-plum);">Bank
-            Transfer Details</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Cheques payable to: <strong>DM
-              Enterprises</strong></p>
+          <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary-plum);">Bank Transfer Details</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Cheques payable to: <strong>DM Enterprises</strong></p>
 
           <table class="bank-detail-table">
             <tr>
@@ -140,352 +145,153 @@
           </table>
 
           <div style="margin-top: 1.25rem; font-size: 0.82rem; color: var(--text-muted); text-align: center;">
-            <i class="fas fa-shield-alt" style="color: var(--whatsapp-green);"></i> Instant digital receipt issued upon
-            payment transfer.
+            <i class="fas fa-shield-alt" style="color: var(--whatsapp-green);"></i> Instant digital receipt issued upon payment transfer.
           </div>
         </div>
       </div>
 
       <!-- Payment Schedule Grid -->
-      <h3 class="section-title" style="font-size: 1.6rem; text-align: left; margin-bottom: 1.5rem;">Instalment Payment
-        Schedules</h3>
+      @if($tour->inst_deposit)
+        <h3 class="section-title" style="font-size: 1.6rem; text-align: left; margin-bottom: 1.5rem;">Instalment Payment Schedules</h3>
 
-      <div class="payment-schedule-container">
-        <!-- Sharing Schedule -->
-        <div class="schedule-card animate-card">
-          <h4>
-            <span>Sharing Occupancy</span>
-            <span style="font-size: 0.9rem;" class="schedule-total">₹ 3,49,999 Total</span>
-          </h4>
-          <div class="schedule-step-list">
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">Registration Booking Amount</strong>
-                <span class="due-date">Due upon seat reservation</span>
+        <div class="payment-schedule-container">
+          <!-- Sharing Schedule -->
+          <div class="schedule-card animate-card">
+            <h4>
+              <span>Sharing Occupancy</span>
+              <span style="font-size: 0.9rem;" class="schedule-total">₹ {{ number_format((float)$tour->price_sharing, 0) }} Total</span>
+            </h4>
+            <div class="schedule-step-list">
+              <div class="schedule-step-item">
+                <div>
+                  <strong style="display: block;">Registration Booking Amount</strong>
+                  <span class="due-date">Due upon seat reservation</span>
+                </div>
+                <span class="amount">₹ {{ number_format((float)$tour->inst_deposit, 0) }}</span>
               </div>
-              <span class="amount">₹ 50,000</span>
-            </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">1st Instalment</strong>
-                <span class="due-date">Due: 3rd August 2026</span>
-              </div>
-              <span class="amount">₹ 90,000</span>
-            </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">2nd Instalment</strong>
-                <span class="due-date">Due: 5th September 2026</span>
-              </div>
-              <span class="amount">₹ 90,000</span>
-            </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">3rd Final Instalment</strong>
-                <span class="due-date">Due: 5th October 2026</span>
-              </div>
-              <span class="amount">₹ 69,999</span>
+              @if($tour->inst_1)
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">1st Instalment</strong>
+                    <span class="due-date">Details</span>
+                  </div>
+                  <span class="amount">{{ $tour->inst_1 }}</span>
+                </div>
+              @endif
+              @if($tour->inst_2)
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">2nd Instalment</strong>
+                    <span class="due-date">Details</span>
+                  </div>
+                  <span class="amount">{{ $tour->inst_2 }}</span>
+                </div>
+              @endif
+              @if($tour->inst_final)
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">Final Instalment</strong>
+                    <span class="due-date">Details</span>
+                  </div>
+                  <span class="amount">{{ $tour->inst_final }}</span>
+                </div>
+              @endif
             </div>
           </div>
-        </div>
 
-        <!-- Single Occupancy Schedule -->
-        <div class="schedule-card animate-card">
-          <h4>
-            <span>Single Occupancy</span>
-            <span style="font-size: 0.9rem;" class="schedule-total">₹ 3,91,999 Total</span>
-          </h4>
-          <div class="schedule-step-list">
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">Registration Booking Amount</strong>
-                <span class="due-date">Due upon seat reservation</span>
+          <!-- Single Occupancy Schedule -->
+          @if($tour->price_single)
+            <div class="schedule-card animate-card">
+              <h4>
+                <span>Single Occupancy</span>
+                <span style="font-size: 0.9rem;" class="schedule-total">₹ {{ number_format((float)$tour->price_sharing + (float)$tour->price_single, 0) }} Total</span>
+              </h4>
+              <div class="schedule-step-list">
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">Registration Booking Amount</strong>
+                    <span class="due-date">Due upon seat reservation</span>
+                  </div>
+                  <span class="amount">₹ {{ number_format((float)$tour->inst_deposit, 0) }}</span>
+                </div>
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">Single Supplement Charge</strong>
+                    <span class="due-date">Due during installments</span>
+                  </div>
+                  <span class="amount">+ ₹ {{ number_format((float)$tour->price_single, 0) }}</span>
+                </div>
+                <div class="schedule-step-item">
+                  <div>
+                    <strong style="display: block;">Installment Balances</strong>
+                    <span class="due-date">Based on sharing rules</span>
+                  </div>
+                  <span class="amount">See sharing schedule</span>
+                </div>
               </div>
-              <span class="amount">₹ 80,000</span>
             </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">1st Instalment</strong>
-                <span class="due-date">Due: 3rd August 2026</span>
-              </div>
-              <span class="amount">₹ 1,20,000</span>
-            </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">2nd Instalment</strong>
-                <span class="due-date">Due: 5th September 2026</span>
-              </div>
-              <span class="amount">₹ 1,20,000</span>
-            </div>
-            <div class="schedule-step-item">
-              <div>
-                <strong style="display: block;">3rd Final Instalment</strong>
-                <span class="due-date">Due: 5th October 2026</span>
-              </div>
-              <span class="amount">₹ 59,999</span>
-            </div>
-          </div>
+          @endif
         </div>
-      </div>
+      @endif
     </section>
 
     <!-- Flight & Luggage Allowances Section -->
-    <section class="content-section"
-      style="background: var(--theme-light-bg-gray); border-radius: var(--radius-xl); padding: 4rem 3rem;">
-      <h2 class="section-title">Flight Route & Baggage Allowances</h2>
-      <p class="section-subtitle">Comfortable international flight routing with generous checked baggage capacity.</p>
+    @if(is_array($tour->flights) && count($tour->flights) > 0)
+      <section class="content-section" style="background: var(--theme-light-bg-gray); border-radius: var(--radius-xl); padding: 4rem 3rem;">
+        <h2 class="section-title">Flight Route & Baggage Allowances</h2>
+        <p class="section-subtitle">Comfortable flight routing with checked baggage capacity included.</p>
 
-      <div class="flight-luggage-grid">
-        <div class="flight-luggage-card animate-card">
-          <i class="fas fa-plane-departure"></i>
-          <h5>Kolkata to Delhi</h5>
-          <p>IndiGo 6E5190<br>Check-in: <strong>15 kg</strong> | Cabin: <strong>7 kg</strong></p>
+        <div class="flight-luggage-grid">
+          @foreach($tour->flights as $flight)
+            <div class="flight-luggage-card animate-card">
+              <i class="fas fa-plane-departure"></i>
+              <h5>{{ $flight['route'] ?? 'Sector' }}</h5>
+              <p>{{ $flight['code'] ?? '' }}<br>Check-in: <strong>{{ $flight['baggage'] ?? 'N/A' }}</strong> | Cabin: <strong>{{ $flight['cabin'] ?? 'N/A' }}</strong></p>
+            </div>
+          @endforeach
         </div>
-
-        <div class="flight-luggage-card animate-card">
-          <i class="fas fa-plane"></i>
-          <h5>Delhi to Warsaw</h5>
-          <p>Polish Airlines LOT LO72<br>Check-in: <strong>23 kg</strong> | Cabin: <strong>8 kg</strong></p>
-        </div>
-
-        <div class="flight-luggage-card animate-card">
-          <i class="fas fa-plane-arrival"></i>
-          <h5>Prague to Delhi</h5>
-          <p>Air Arabia (via Sharjah)<br>Check-in: <strong>23 kg</strong> | Cabin: <strong>7 kg</strong></p>
-        </div>
-
-        <div class="flight-luggage-card animate-card">
-          <i class="fas fa-suitcase-rolling"></i>
-          <h5>Delhi to Kolkata</h5>
-          <p>IndiGo 6E6836<br>Check-in: <strong>15 kg</strong> | Cabin: <strong>7 kg</strong></p>
-        </div>
-      </div>
-    </section>
+      </section>
+    @endif
 
     <!-- 2-Column Detailed Day-by-Day Itinerary Section -->
     <section class="content-section" id="itinerary-section">
       <h2 class="section-title">Day-by-Day Tour Itinerary</h2>
-      <p class="section-subtitle">A side-by-side 2-column overview of our 10-day expedition exploring Poland & Czechia.
-      </p>
+      <p class="section-subtitle">A side-by-side overview of our custom itinerary exploring {{ $tour->title }}.</p>
 
       <div class="timeline-container-2col">
-
-        <!-- Day 1 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 1</span>
-              <span>Thu, Oct 15 — Flight Departure</span>
+        @if(is_array($tour->itinerary) && count($tour->itinerary) > 0)
+          @foreach($tour->itinerary as $dayIndex => $day)
+            <div class="timeline-day-card animate-card">
+              <div class="timeline-day-header">
+                <div class="timeline-day-title">
+                  <span class="day-badge">Day {{ $dayIndex + 1 }}</span>
+                  <span>{{ $day['title'] ?? 'Adventure Day' }}</span>
+                </div>
+              </div>
+              <div class="timeline-day-body">
+                @if(!empty($day['banner']))
+                  <div style="width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem; height: 180px;">
+                    <img src="{{ $day['banner'] }}" alt="{{ $day['title'] ?? 'Itinerary Day Banner' }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  </div>
+                @endif
+                <p>{{ $day['description'] ?? '' }}</p>
+              </div>
             </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="flight-info-banner">
-              <i class="fas fa-plane"></i> IndiGo 6E5190 | Depart Kolkata 22:30 ➔ Arrive Delhi 00:55
-            </div>
-            <p>Meet at Kolkata Airport for flight to Delhi. Layover at Delhi Airport overnight before the international
-              departure.</p>
-          </div>
-        </div>
-
-        <!-- Day 2 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 2</span>
-              <span>Fri, Oct 16 — Warsaw Arrival</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="flight-info-banner">
-              <i class="fas fa-plane"></i> Polish Airlines LO72 | Depart Delhi 08:00 AM ➔ Arrive Warsaw 12:40 PM
-            </div>
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Warsaw City Centre (4★)</div>
-            <p>Arrival in Warsaw. Local lunch & hotel check-in. Guided evening walking tour covering Royal Castle, St.
-              John's Archcathedral, Old Town Market Square, and Castle Square.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Royal Castle</span>
-              <span class="spot-pill">St. John's Archcathedral</span>
-              <span class="spot-pill">Castle Square</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 3 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 3</span>
-              <span>Sat, Oct 17 — Full Day Warsaw Sightseeing</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Warsaw City Centre (4★)</div>
-            <p>Breakfast at hotel. Full-day Warsaw tour: Lazienki Park, Palace on the Isle, Wilanow Palace, Old Town,
-              and Presidential Palace. Free time for shopping. Local Lunch & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Lazienki Park</span>
-              <span class="spot-pill">Palace on the Isle</span>
-              <span class="spot-pill">Wilanow Palace</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 4 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 4</span>
-              <span>Sun, Oct 18 — Czestochowa to Krakow</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Krakow City Centre (5★)</div>
-            <p>Checkout from Warsaw. Depart for Czestochowa to visit Jasna Gora Monastery, Black Madonna Icon & Chapel
-              of Our Lady. Evening walking tour of Krakow Old Town. Local Lunch & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Jasna Gora Monastery</span>
-              <span class="spot-pill">Black Madonna Icon</span>
-              <span class="spot-pill">Krakow Old Town</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 5 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 5</span>
-              <span>Mon, Oct 19 — Historic Krakow Tour</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Krakow City Centre (5★)</div>
-            <p>Visit Sanctuary of Divine Mercy, John Paul II Center, St. Mary's Basilica, Main Market Square, and Cloth
-              Hall. Free leisure time in Krakow Old Town. Local Lunch & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Sanctuary of Divine Mercy</span>
-              <span class="spot-pill">St. Mary's Basilica</span>
-              <span class="spot-pill">Cloth Hall</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 6 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 6</span>
-              <span>Tue, Oct 20 — Wadowice & Salt Mine</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Krakow City Centre (5★)</div>
-            <p>Excursion to Wadowice (Pope John Paul II birthplace & Museum) and UNESCO Wieliczka Salt Mine. Local Lunch
-              & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Wadowice Basilica</span>
-              <span class="spot-pill">Pope JPII Museum</span>
-              <span class="spot-pill">Wieliczka Salt Mine</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 7 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 7</span>
-              <span>Wed, Oct 21 — Zakopane Alpine Tour</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Krakow City Centre (5★)</div>
-            <p>Full day excursion to Zakopane in the Tatra Mountains. Krupowki Street, Gubalowka Funicular, Highlander
-              Market, and Tatra Mountain Cable Car. Local Lunch & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Krupowki Street</span>
-              <span class="spot-pill">Gubalowka Funicular</span>
-              <span class="spot-pill">Tatra Cable Car</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 8 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 8</span>
-              <span>Thu, Oct 22 — Scenic Bus Drive to Prague</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Prague Congress Centre (4★)
-            </div>
-            <p>Checkout from Krakow. Scenic coach drive to Prague, Czechia. Highway lunch. Check-in to hotel, followed
-              by orientation walk to Old Town Square and Astronomical Clock. Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Highway Drive</span>
-              <span class="spot-pill">Old Town Square</span>
-              <span class="spot-pill">Astronomical Clock</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Day 9 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Day 9</span>
-              <span>Fri, Oct 23 — Guided Tour of Prague</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="hotel-info-badge"><i class="fas fa-hotel"></i> Stay: Holiday Inn Prague Congress Centre (4★)
-            </div>
-            <p>Guided tour of Prague: Prague Castle, St. Vitus Cathedral, Charles Bridge, Infant Jesus of Prague Shrine,
-              Old Town Square & Wenceslas Square. Local Lunch & Dinner included.</p>
-            <div class="timeline-spots-list">
-              <span class="spot-pill">Prague Castle</span>
-              <span class="spot-pill">Charles Bridge</span>
-              <span class="spot-pill">Infant Jesus Shrine</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Days 10 & 11 -->
-        <div class="timeline-day-card animate-card">
-          <div class="timeline-day-header">
-            <div class="timeline-day-title">
-              <span class="day-badge">Days 10 & 11</span>
-              <span>Sat & Sun, Oct 24–25 — Return Flight</span>
-            </div>
-          </div>
-          <div class="timeline-day-body">
-            <div class="flight-info-banner">
-              <i class="fas fa-plane"></i> Air Arabia (via Sharjah) | Depart Prague 13:15 ➔ Arrive Delhi 03:50 AM (Oct
-              25)<br>
-              <i class="fas fa-plane"></i> IndiGo 6E6836 | Depart Delhi 07:00 AM ➔ Arrive Kolkata 09:05 AM (Oct 25)
-            </div>
-            <p>Checkout from Prague hotel. Transfer to airport for Air Arabia return flight via Sharjah to Delhi,
-              connecting to Kolkata. Arrive on Oct 25 morning.</p>
-          </div>
-        </div>
-
+          @endforeach
+        @endif
       </div>
     </section>
 
     <!-- Visa Documents Checklist Section -->
     <section class="content-section">
-      <h2 class="section-title">Schengen Visa Documents Required</h2>
-      <p class="section-subtitle">Aerovia handles flight/hotel reservations and insurance. Travelers must provide the
-        following:</p>
+      <h2 class="section-title">Visa Documents Required</h2>
+      <p class="section-subtitle">Aerovia handles flight/hotel reservations and insurance. Travelers must provide the following:</p>
 
       <div class="visa-docs-grid">
         <div class="visa-doc-card animate-card">
           <h4><i class="fas fa-briefcase"></i> Salaried Individuals</h4>
           <ul class="visa-doc-list">
-            <li><i class="fas fa-check-circle"></i> Passport bio pages (front, back & used pages, 6 months validity).
-            </li>
+            <li><i class="fas fa-check-circle"></i> Passport bio pages (front, back & used pages, 6 months validity).</li>
             <li><i class="fas fa-check-circle"></i> 2 Passport photos (white background).</li>
             <li><i class="fas fa-check-circle"></i> 3 months bank savings statement (stamped & signed).</li>
             <li><i class="fas fa-check-circle"></i> 3 months payslips & 2 years ITR returns.</li>
@@ -522,17 +328,19 @@
       <div class="terms-box-card animate-card">
         <h3><i class="fas fa-exclamation-triangle"></i> Tour Cost Exclusions & Important Terms</h3>
         <ul class="terms-list">
-          <li><i class="fas fa-times-circle"></i> <strong>Exclusions:</strong> Any hike in airfare, taxes, visa fees,
-            border taxes, personal laundry, minibar, safe deposit vaults, or personal shopping.</li>
-          <li><i class="fas fa-info-circle"></i> <strong>Itinerary Modifications:</strong> Day itinerary subject to
-            last-minute adjustments due to local weather, traffic, strikes, or road conditions.</li>
-          <li><i class="fas fa-hotel"></i> <strong>Check-in/Check-out:</strong> Standard hotel check-in at 14:00 hours /
-            check-out at 12:00 hours. Early/late check-out subject to hotel availability.</li>
-          <li><i class="fas fa-shield-alt"></i> <strong>Agent Capacity:</strong> Aerovia Expeditions acts in the
-            capacity of an agent for independent suppliers (hotels, airlines, coaches).</li>
-          <li><i class="fas fa-file-signature"></i> <strong>Passenger Agreement:</strong> All passengers traveling on
-            the Poland & Czechia tour (15 Oct – 25 Oct 2026) agree to abide by the tour regulations led by Tour Director
-            Mr. Dale Mogose.</li>
+          @if($tour->exclusions)
+            @foreach(explode("\n", str_replace("\r", "", $tour->exclusions)) as $exclusion)
+              @if(trim($exclusion))
+                <li><i class="fas fa-times-circle"></i> {{ trim($exclusion) }}</li>
+              @endif
+            @endforeach
+          @endif
+          <li><i class="fas fa-info-circle"></i> <strong>Itinerary Modifications:</strong> Day itinerary subject to last-minute adjustments due to local weather, traffic, strikes, or road conditions.</li>
+          <li><i class="fas fa-hotel"></i> <strong>Check-in/Check-out:</strong> Standard hotel check-in at 14:00 hours / check-out at 12:00 hours. Early/late check-out subject to hotel availability.</li>
+          <li><i class="fas fa-shield-alt"></i> <strong>Agent Capacity:</strong> Aerovia Expeditions acts in the capacity of an agent for independent suppliers (hotels, airlines, coaches).</li>
+          @if($tour->director)
+            <li><i class="fas fa-file-signature"></i> <strong>Passenger Agreement:</strong> All passengers traveling on the {{ $tour->title }} tour ({{ date('d M', strtotime($tour->start_date)) }} – {{ date('d M Y', strtotime($tour->end_date)) }}) agree to abide by the tour regulations led by Tour Director {{ $tour->director }}.</li>
+          @endif
         </ul>
       </div>
     </section>
@@ -542,28 +350,37 @@
       <div class="organizer-contact-card animate-card">
         <div class="organizer-info">
           <h3>Aerovia Expeditions</h3>
-          <p>Tour Director: Mr. Dale Mogose | Trale Travels Legacy</p>
+          @if($tour->director)
+            <p>Tour Director: {{ $tour->director }} | Trale Travels Legacy</p>
+          @endif
         </div>
 
         <div class="organizer-contacts-flex">
-          <a href="tel:+916289006014" class="contact-pill"><i class="fas fa-phone-alt"></i> +91 62890 06014</a>
-          <a href="tel:+919874386677" class="contact-pill"><i class="fas fa-phone-alt"></i> +91 98743 86677</a>
-          <a href="mailto:traletravelsinc@gmail.com" class="contact-pill"><i class="fas fa-envelope"></i>
-            traletravelsinc@gmail.com</a>
-          <div class="contact-pill"><i class="fas fa-map-marker-alt"></i> 127A Park Street, Kolkata - 700016</div>
+          @if($siteSettings && $siteSettings->phone)
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings->phone) }}" class="contact-pill"><i class="fas fa-phone-alt"></i> {{ $siteSettings->phone }}</a>
+          @endif
+          @if($tour->director_phone)
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $tour->director_phone) }}" class="contact-pill"><i class="fas fa-phone-alt"></i> {{ $tour->director_phone }} (Director)</a>
+          @endif
+          @if($siteSettings && $siteSettings->email)
+            <a href="mailto:{{ $siteSettings->email }}" class="contact-pill"><i class="fas fa-envelope"></i> {{ $siteSettings->email }}</a>
+          @endif
+          @if($siteSettings && $siteSettings->address)
+            <div class="contact-pill"><i class="fas fa-map-marker-alt"></i> {{ $siteSettings->address }}</div>
+          @endif
         </div>
       </div>
     </section>
 
     <!-- Parallax Call to Action Banner -->
     <section class="content-section" style="padding-bottom: 2rem;">
-            <div class="cta-parallax-banner animate-card" style="position: relative; overflow: hidden;">
+      <div class="cta-parallax-banner animate-card" style="position: relative; overflow: hidden;">
         <div class="cta-parallax-bg parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80&fm=webp'); position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0;"></div>
         <div class="cta-left" style="position: relative; z-index: 2;">
           <h3>Ready to Explore Aerovia?</h3>
           <p>Start your journey today with expert planning, seamless booking, and unforgettable experiences.</p>
         </div>
-        <a href="https://wa.me/916289006014" target="_blank" class="btn btn-whatsapp-hero" style="position: relative; z-index: 2;"><i
+        <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-whatsapp-hero" style="position: relative; z-index: 2;"><i
             class="fab fa-whatsapp"></i> Reserve Now on WhatsApp</a>
       </div>
     </section>

@@ -26,7 +26,8 @@ Route::get('/', function () {
             ]
         ]);
     }
-    return view('home', compact('testimonials'));
+    $tours = \App\Models\Tour::all();
+    return view('home', compact('testimonials', 'tours'));
 });
 
 Route::get('/about', function () {
@@ -38,11 +39,21 @@ Route::get('/services', function () {
 });
 
 Route::get('/tours', function () {
-    return view('tours');
-});
+    $tours = \App\Models\Tour::all();
+    return view('tours', compact('tours'));
+})->name('tours.index');
 
+Route::get('/tours/{tour}', function (\App\Models\Tour $tour) {
+    return view('tour-description', compact('tour'));
+})->name('tours.show');
+
+// Fallback legacy route for safety
 Route::get('/tour-description', function () {
-    return view('tour-description');
+    $tour = \App\Models\Tour::first();
+    if (!$tour) {
+        return redirect()->route('tours.index');
+    }
+    return redirect()->route('tours.show', $tour->id);
 });
 
 Route::get('/contact', function () {
