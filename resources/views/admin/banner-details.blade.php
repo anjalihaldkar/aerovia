@@ -4,7 +4,7 @@
 @section('page_subtitle', 'Choose local media files to update banners and videos across all pages')
 
 @section('header_actions')
-  <button class="btn btn-primary" onclick="document.getElementById('banner-details-form').submit();"><i class="fas fa-save"></i> Save Banners</button>
+  <button class="btn btn-primary" onclick="const f = document.getElementById('banner-details-form'); if(f && f.reportValidity()) f.submit();"><i class="fas fa-save"></i> Save Banners</button>
 @endsection
 
 @section('content')

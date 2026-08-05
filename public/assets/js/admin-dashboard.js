@@ -535,6 +535,17 @@ function renderSceneryItems() {
 function handleSceneryFileSelect(input, index) {
   const file = input.files[0];
   if (file) {
+    if (!file.type.startsWith('image/')) {
+      alert('Error: Please select a valid image file.');
+      input.value = '';
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Error: Image file size cannot exceed 2MB.');
+      input.value = '';
+      return;
+    }
+
     const url = URL.createObjectURL(file);
     const textInput = document.getElementById(`scenery-url-${index}`);
     if (textInput) textInput.value = url;
