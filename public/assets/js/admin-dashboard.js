@@ -505,12 +505,13 @@ function renderSceneryItems() {
       
       <div class="form-grid-2" style="gap: 0.75rem;">
         <div class="form-group form-group-full">
-          <label class="field-label">Scenery Title</label>
-          <input type="text" class="field-input scenery-title-input" name="scenery[${index}][title]" placeholder="e.g. Poland & Czechia" value="${scenery.title}">
-        </div>
-        <div class="form-group form-group-full">
-          <label class="field-label">Scenery Subtitle / Route</label>
-          <input type="text" class="field-input scenery-subtitle-input" name="scenery[${index}][subtitle]" placeholder="e.g. 10D/11N Expedition" value="${scenery.subtitle}">
+          <label class="field-label" style="opacity: 0.6; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Linked Tour</label>
+          <div style="font-weight: 700; color: #FFF; font-size: 1rem;">${scenery.title}</div>
+          <div style="font-size: 0.85rem; color: var(--star-gold); margin-top: 0.2rem; font-weight: 500;">${scenery.subtitle}</div>
+          
+          <!-- Hidden inputs to submit title and subtitle safely -->
+          <input type="hidden" class="scenery-title-input" name="scenery[${index}][title]" value="${scenery.title}">
+          <input type="hidden" class="scenery-subtitle-input" name="scenery[${index}][subtitle]" value="${scenery.subtitle}">
         </div>
         <div class="form-group form-group-full">
           <label class="field-label">Scenery Image URL / Upload File</label>
