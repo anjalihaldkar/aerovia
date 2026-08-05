@@ -80,9 +80,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [TourController::class, 'index'])->name('admin.dashboard');
         Route::resource('tours', TourController::class)->except(['index', 'show']);
 
-        Route::get('/settings', function () {
-            return view('admin.settings');
-        })->name('admin.settings');
+        Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
+        Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'store'])->name('admin.settings.store');
 
         Route::get('/testimonials', [App\Http\Controllers\Admin\TestimonialController::class, 'index'])->name('admin.testimonials');
         Route::post('/testimonials', [App\Http\Controllers\Admin\TestimonialController::class, 'store'])->name('admin.testimonials.store');

@@ -85,10 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 6. Load Settings Page data if we are on settings.html
-  if (document.getElementById('settings-form')) {
-    loadGeneralSettings();
-  }
+  // 6. Load Settings Page data (Disabled in favor of Laravel server-side rendering)
+  // if (document.getElementById('settings-form')) {
+  //   loadGeneralSettings();
+  // }
 
   // 7. Load Testimonials Manager data (Disabled in favor of Laravel server-side rendering)
   // if (document.getElementById('testimonials-list-container')) {
@@ -341,31 +341,13 @@ const defaultFaqs = [
   { question: "Do you offer corporate or family group discounts?", answer: "Yes, we offer tailored rates and customized perks for corporate groups, custom family gatherings, and groups booking 8 or more guests." }
 ];
 
-function loadGeneralSettings() {
-  // Load Contact Info
-  const savedContact = JSON.parse(localStorage.getItem('aerovia_contact_settings') || JSON.stringify(defaultContact));
-  document.getElementById('setting-phone').value = savedContact.phone || '';
-  document.getElementById('setting-email').value = savedContact.email || '';
-  document.getElementById('setting-address').value = savedContact.address || '';
-  document.getElementById('setting-fb').value = savedContact.fb || '';
-  document.getElementById('setting-linkedin').value = savedContact.linkedin || '';
-  document.getElementById('setting-instagram').value = savedContact.instagram || '';
-  document.getElementById('setting-whatsapp').value = savedContact.whatsapp || '';
-
-  // Load FAQs
-  const faqContainer = document.getElementById('faq-editor-container');
-  if (faqContainer) {
-    faqContainer.innerHTML = '';
-    const savedFaqs = JSON.parse(localStorage.getItem('aerovia_faqs') || JSON.stringify(defaultFaqs));
-    savedFaqs.forEach((faq, index) => {
-      addNewFaqItem(faq.question, faq.answer);
-    });
-  }
-}
+// General settings loader not needed as Laravel renders them directly
 
 function addNewFaqItem(questionVal = '', answerVal = '') {
   const container = document.getElementById('faq-editor-container');
   if (!container) return;
+
+  const index = container.querySelectorAll('.faq-item-box').length;
 
   const faqBox = document.createElement('div');
   faqBox.className = 'editor-card-item faq-item-box';
@@ -376,44 +358,32 @@ function addNewFaqItem(questionVal = '', answerVal = '') {
     </div>
     <div class="form-group form-group-full" style="margin-bottom: 0.75rem;">
       <label class="field-label">Question</label>
-      <input type="text" class="field-input faq-question-input" placeholder="Enter FAQ Question..." value="${questionVal}">
+      <input type="text" name="faqs[${index}][question]" class="field-input faq-question-input" placeholder="Enter FAQ Question..." value="${questionVal}" required>
     </div>
     <div class="form-group form-group-full" style="margin-bottom: 0;">
       <label class="field-label">Answer</label>
-      <textarea class="field-input faq-answer-input" style="height: 75px;" placeholder="Enter FAQ Answer...">${answerVal}</textarea>
+      <textarea name="faqs[${index}][answer]" class="field-input faq-answer-input" style="height: 75px;" placeholder="Enter FAQ Answer..." required>${answerVal}</textarea>
     </div>
   `;
   container.appendChild(faqBox);
 }
 
 function saveGeneralSettings() {
-  const contactObj = {
-    phone: document.getElementById('setting-phone').value.trim(),
-    email: document.getElementById('setting-email').value.trim(),
-    address: document.getElementById('setting-address').value.trim(),
-    fb: document.getElementById('setting-fb').value.trim(),
-    linkedin: document.getElementById('setting-linkedin').value.trim(),
-    instagram: document.getElementById('setting-instagram').value.trim(),
-    whatsapp: document.getElementById('setting-whatsapp').value.trim()
-  };
+  const form = document.getElementById('settings-form');
+  if (form) {
+    // Re-index all FAQ inputs dynamically so array keys are contiguous
+    const faqBoxes = form.querySelectorAll('.faq-item-box');
+    faqBoxes.forEach((box, idx) => {
+      const qInput = box.querySelector('.faq-question-input');
+      const aInput = box.querySelector('.faq-answer-input');
+      if (qInput) qInput.setAttribute('name', `faqs[${idx}][question]`);
+      if (aInput) aInput.setAttribute('name', `faqs[${idx}][answer]`);
+    });
 
-  localStorage.setItem('aerovia_contact_settings', JSON.stringify(contactObj));
-
-  // Collect FAQs
-  const faqBoxes = document.querySelectorAll('.faq-item-box');
-  const faqsArr = [];
-  faqBoxes.forEach(box => {
-    const question = box.querySelector('.faq-question-input').value.trim();
-    const answer = box.querySelector('.faq-answer-input').value.trim();
-    if (question && answer) {
-      faqsArr.push({ question, answer });
+    if (form.reportValidity()) {
+      form.submit();
     }
-  });
-
-  localStorage.setItem('aerovia_faqs', JSON.stringify(faqsArr));
-
-  const successModal = document.getElementById('success-modal');
-  if (successModal) successModal.style.display = 'flex';
+  }
 }
 
 
