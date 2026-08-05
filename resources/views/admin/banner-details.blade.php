@@ -9,6 +9,15 @@
 
 @section('content')
       <div class="flex-col">
+        @if ($errors->any())
+          <div class="alert alert-danger" style="background-color: rgba(239, 68, 68, 0.2); border: 1px solid rgb(239, 68, 68); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem;">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
         
         @if(session('success'))
           <div class="alert" style="background: rgba(0, 255, 0, 0.1); color: #00ff00; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
@@ -167,7 +176,34 @@
 <script>
   function previewMedia(input, previewId) {
     if (input.files && input.files[0]) {
-      const url = URL.createObjectURL(input.files[0]);
+      const file = input.files[0];
+      const isVideo = previewId.includes('video');
+      
+      if (isVideo) {
+        if (!file.type.startsWith('video/')) {
+          alert('Error: Please select a valid video file.');
+          input.value = '';
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert('Error: Video file size cannot exceed 20MB.');
+          input.value = '';
+          return;
+        }
+      } else {
+        if (!file.type.startsWith('image/')) {
+          alert('Error: Please select a valid image file.');
+          input.value = '';
+          return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+          alert('Error: Image file size cannot exceed 2MB.');
+          input.value = '';
+          return;
+        }
+      }
+
+      const url = URL.createObjectURL(file);
       const preview = document.getElementById(previewId);
       if (preview.tagName.toLowerCase() === 'video') {
         preview.querySelector('source').src = url;

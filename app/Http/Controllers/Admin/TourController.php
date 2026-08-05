@@ -32,6 +32,11 @@ class TourController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'price_sharing' => 'required|integer|min:0',
+            'price_single' => 'nullable|integer|min:0',
+            'inst_deposit' => 'nullable|integer|min:0',
         ]);
         
         $data = $request->except(['_token', '_method']);
@@ -81,6 +86,11 @@ class TourController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'price_sharing' => 'required|integer|min:0',
+            'price_single' => 'nullable|integer|min:0',
+            'inst_deposit' => 'nullable|integer|min:0',
         ]);
         
         $data = $request->except(['_token', '_method']);

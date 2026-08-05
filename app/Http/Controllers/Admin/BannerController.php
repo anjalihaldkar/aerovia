@@ -19,6 +19,20 @@ class BannerController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'home_video' => 'nullable|file|mimetypes:video/mp4,video/mpeg,video/ogg,video/webm,video/quicktime|max:20480',
+            'home_poster' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'about_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'services_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'tours_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'contact_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'scenery' => 'nullable|array',
+            'scenery.*.title' => 'nullable|string|max:255',
+            'scenery.*.subtitle' => 'nullable|string|max:255',
+            'scenery.*.image_url' => 'nullable|string',
+            'scenery.*.file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
         $keys = [
             'home_video', 'home_poster', 'about_banner', 
             'services_banner', 'tours_banner', 'contact_banner'
