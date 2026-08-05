@@ -120,11 +120,11 @@
             <div class="form-grid">
               <div class="form-group">
                 <label for="first-name">First Name</label>
-                <input type="text" id="first-name" name="first_name" placeholder="John" required>
+                <input type="text" id="first-name" name="first_name" placeholder="John" required pattern="^[a-zA-Z\s]{2,50}$" title="First name must be 2-50 characters long and contain only letters and spaces.">
               </div>
               <div class="form-group">
                 <label for="last-name">Last Name</label>
-                <input type="text" id="last-name" name="last_name" placeholder="Doe" required>
+                <input type="text" id="last-name" name="last_name" placeholder="Doe" required pattern="^[a-zA-Z\s]{2,50}$" title="Last name must be 2-50 characters long and contain only letters and spaces.">
               </div>
             </div>
 
@@ -135,7 +135,7 @@
               </div>
               <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
+                <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required pattern="^\+?[0-9\s\-]{10,20}$" title="Please enter a valid phone number (minimum 10 digits).">
               </div>
             </div>
 
@@ -151,7 +151,7 @@
 
             <div class="form-group" style="margin-bottom: 2rem;">
               <label for="message">Message</label>
-              <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea>
+              <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required minlength="10" title="Message must be at least 10 characters long."></textarea>
             </div>
 
             <button type="submit" class="btn btn-plum" style="width: 100%; padding: 0.85rem;">Send Message <i
