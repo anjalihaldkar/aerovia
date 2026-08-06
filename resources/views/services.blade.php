@@ -6,7 +6,7 @@
 @section('content')
     <!-- Hero Card Banner with Background Video -->
     <div class="hero-card-banner">
-      <img src="{{ asset('assets/images/services-hero.webp') }}" class="hero-image-bg" alt="Hero Background">
+      <img src="{{ isset($banners['services_banner']) ? asset('storage/' . $banners['services_banner']) : asset('assets/images/services-hero.webp') }}" class="hero-image-bg" alt="Hero Background">
       <div class="hero-img-overlay"></div>
 
       <!-- Hero Main Content -->

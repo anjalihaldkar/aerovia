@@ -468,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sceneryItemsToRender.forEach(scenery => {
           const card = document.createElement('a');
           card.className = 'scenery-card';
-          card.href = 'tour-description.html';
+          card.href = 'tour-description';
           card.innerHTML = `
             <img loading="lazy" src="${scenery.image}" alt="${scenery.title}" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fm=webp&fit=crop&w=800&q=80'">
             <div class="scenery-card-content">

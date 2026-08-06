@@ -6,7 +6,7 @@
 @section('content')
     <!-- Hero Card Banner with Background Video -->
     <div class="hero-card-banner">
-      <img src="{{ asset('assets/images/contact-hero.webp') }}" class="hero-image-bg" alt="Hero Background">
+      <img src="{{ isset($banners['contact_banner']) ? asset('storage/' . $banners['contact_banner']) : asset('assets/images/contact-hero.webp') }}" class="hero-image-bg" alt="Hero Background">
       <div class="hero-img-overlay"></div>
 
       <!-- Hero Main Content -->
@@ -14,7 +14,7 @@
         <h1 class="hero-main-heading">Get In Touch With<br>Aerovia Expeditions</h1>
         <p class="hero-sub-text">Have questions about our Poland & Czechia tour, custom travel itineraries, or visa
           support? Our team is here to assist you.</p>
-        <a href="https://wa.me/916289006014" target="_blank" class="btn btn-whatsapp-hero"
+        <a href="https://wa.me/{{ $settings->whatsapp ?? '916289006014' }}" target="_blank" class="btn btn-whatsapp-hero"
           style="padding: 0.85rem 2.25rem;"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
       </div>
 
@@ -53,7 +53,7 @@
                 <i class="fas fa-phone-alt"></i>
                 <div>
                   <strong>Phone / WhatsApp:</strong>
-                  <p style="margin-top: 2px;">+91 62890 06014 / +91 98743 86677</p>
+                  <p style="margin-top: 2px;">{{ $settings->phone ?? '+91 62890 06014' }}</p>
                 </div>
               </div>
 
@@ -61,7 +61,7 @@
                 <i class="fas fa-envelope"></i>
                 <div>
                   <strong>Email Address:</strong>
-                  <p style="margin-top: 2px;">traletravelsinc@gmail.com</p>
+                  <p style="margin-top: 2px;"><a href="mailto:{{ $settings->email ?? 'traletravelsinc@gmail.com' }}" style="color: inherit; text-decoration: none;">{{ $settings->email ?? 'traletravelsinc@gmail.com' }}</a></p>
                 </div>
               </div>
 
@@ -69,7 +69,7 @@
                 <i class="fas fa-map-marker-alt"></i>
                 <div>
                   <strong>Kolkata Headquarters:</strong>
-                  <p style="margin-top: 2px;">127A Park Street, Kolkata - 700016, West Bengal, India</p>
+                  <p style="margin-top: 2px;">{{ $settings->address ?? '127A Park Street, Kolkata - 700016, West Bengal, India' }}</p>
                 </div>
               </div>
 
@@ -84,10 +84,10 @@
           </div>
 
           <div class="contact-socials">
-            <a href="#" class="contact-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="contact-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#" class="contact-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/916289006014" target="_blank" class="contact-social-btn" aria-label="WhatsApp"><i
+            <a href="{{ $settings->fb ?? '#' }}" class="contact-social-btn" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+            <a href="{{ $settings->linkedin ?? '#' }}" class="contact-social-btn" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+            <a href="{{ $settings->instagram ?? '#' }}" class="contact-social-btn" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/{{ $settings->whatsapp ?? '916289006014' }}" target="_blank" class="contact-social-btn" aria-label="WhatsApp" rel="noopener noreferrer"><i
                 class="fab fa-whatsapp"></i></a>
           </div>
         </div>

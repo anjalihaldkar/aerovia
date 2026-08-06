@@ -3,9 +3,8 @@
 @section('content')
     <!-- Hero Card Banner with Background Video -->
     <div class="hero-card-banner">
-      <video autoplay loop muted playsinline class="hero-video-bg" poster="{{ asset('assets/images/video-snapshot.jpg') }}">
-        <source src="{{ asset('assets/videos/Sunset-Banner.mov') }}" type="video/quicktime">
-        <source src="{{ asset('assets/videos/Sunset-Banner.mov') }}" type="video/mp4">
+      <video autoplay loop muted playsinline class="hero-video-bg" poster="{{ isset($banners['home_poster']) ? asset('storage/' . $banners['home_poster']) : asset('assets/images/video-snapshot.jpg') }}">
+        <source src="{{ isset($banners['home_video']) ? asset('storage/' . $banners['home_video']) : asset('assets/videos/Sunset-Banner.mov') }}" type="video/mp4">
       </video>
       <div class="hero-overlay"></div>
 

@@ -26,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
                 \Illuminate\Support\Facades\View::share('settings', null);
             }
 
+            if (\Illuminate\Support\Facades\Schema::hasTable('galleries')) {
+                \Illuminate\Support\Facades\View::share('banners', \App\Models\Gallery::pluck('value', 'key')->toArray());
+            } else {
+                \Illuminate\Support\Facades\View::share('banners', []);
+            }
+
             if (\Illuminate\Support\Facades\Schema::hasTable('faqs')) {
                 \Illuminate\Support\Facades\View::share('faqs', \App\Models\Faq::all());
             } else {
@@ -33,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
             }
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\View::share('settings', null);
+            \Illuminate\Support\Facades\View::share('banners', []);
             \Illuminate\Support\Facades\View::share('faqs', collect());
         }
     }

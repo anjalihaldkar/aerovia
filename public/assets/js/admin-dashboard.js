@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Authentication is now handled by Laravel on the backend.
   const authOverlay = document.getElementById('auth-check-overlay');
-  
+
   // Just fade out the overlay
   setTimeout(() => {
     if (authOverlay) {
@@ -449,9 +449,9 @@ function saveTestimonials() {
     const nameInput = document.getElementById('new-test-name');
     const textInput = document.getElementById('new-test-text');
     const roleInput = document.getElementById('new-test-role');
-    const hasInput = (nameInput && nameInput.value.trim()) || 
-                      (textInput && textInput.value.trim()) || 
-                      (roleInput && roleInput.value.trim());
+    const hasInput = (nameInput && nameInput.value.trim()) ||
+      (textInput && textInput.value.trim()) ||
+      (roleInput && roleInput.value.trim());
 
     if (hasInput) {
       if (form.reportValidity()) {
@@ -575,7 +575,7 @@ function syncSceneryListFromDOM() {
     const imageInput = box.querySelector('.scenery-image-url');
     const image = imageInput ? imageInput.value.trim() : '';
     const rawUrl = image;
-    
+
     // Attempt to retain original URL if present (so we don't break existing db paths)
     const existingObj = sceneryList[index];
     const finalImage = (existingObj && existingObj.image && existingObj.rawUrl === rawUrl) ? existingObj.image : image;
