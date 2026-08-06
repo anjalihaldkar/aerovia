@@ -3,24 +3,28 @@
 
 <head>
   <title>@yield('title', 'Aerovia Expeditions - Discover the Golden Hour With Us')</title>
-  <meta name="description" content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
-  <meta name="keywords" content="travel agency, luxury expeditions, custom tours, vacation planning, travel agency Kolkata, flight inclusive tours, Aerovia Expeditions">
-  
+  <meta name="description"
+    content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
+  <meta name="keywords"
+    content="travel agency, luxury expeditions, custom tours, vacation planning, travel agency Kolkata, flight inclusive tours, Aerovia Expeditions">
+
   <!-- Canonical URL -->
   <link rel="canonical" href="{{ url()->current() }}">
-  
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ url()->current() }}">
   <meta property="og:title" content="@yield('title', 'Aerovia Expeditions - Discover the Golden Hour With Us')">
-  <meta property="og:description" content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
+  <meta property="og:description"
+    content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
   <meta property="og:image" content="{{ asset('assets/images/logo/aerovia-logo.jpg') }}">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="{{ url()->current() }}">
   <meta name="twitter:title" content="@yield('title', 'Aerovia Expeditions - Discover the Golden Hour With Us')">
-  <meta name="twitter:description" content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
+  <meta name="twitter:description"
+    content="@yield('meta_description', 'Discover premium luxury expeditions and custom travel experiences with Aerovia Expeditions. Design your dream journey to the world\'s most extraordinary places today.')">
   <meta name="twitter:image" content="{{ asset('assets/images/logo/aerovia-logo.jpg') }}">
 
   <meta charset="UTF-8">
@@ -39,14 +43,15 @@
 
   <!-- Theme Initialization -->
   <script src="{{ asset('assets/js/theme-init.js') }}"></script>
-  
+
   @stack('head')
 </head>
 
 <body>
 
   <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/916289006014" class="floating-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Contact on WhatsApp">
+  <a href="https://wa.me/{{ $settings->whatsapp ?? '916289006014' }}" class="floating-whatsapp" target="_blank"
+    rel="noopener noreferrer" aria-label="Contact on WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -78,8 +83,10 @@
           <div class="drawer-mobile-items">
             <a href="{{ url('/') }}" class="nav-item {{ request()->is('/') ? 'active' : '' }}">Home</a>
             <a href="{{ url('about') }}" class="nav-item {{ request()->is('about') ? 'active' : '' }}">About us</a>
-            <a href="{{ url('services') }}" class="nav-item {{ request()->is('services') ? 'active' : '' }}">Services</a>
-            <a href="{{ url('tours') }}" class="nav-item {{ request()->is('tours') ? 'active' : '' }}">Tours & Packages</a>
+            <a href="{{ url('services') }}"
+              class="nav-item {{ request()->is('services') ? 'active' : '' }}">Services</a>
+            <a href="{{ url('tours') }}" class="nav-item {{ request()->is('tours') ? 'active' : '' }}">Tours &
+              Packages</a>
             <a href="{{ url('contact') }}" class="nav-item {{ request()->is('contact') ? 'active' : '' }}">Contact</a>
           </div>
 
@@ -89,10 +96,14 @@
             <p><i class="fas fa-phone-alt"></i> +91 62890 06014</p>
 
             <div class="nav-links-socials">
-              <a href="#" class="nav-drawer-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="nav-drawer-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="nav-drawer-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="https://wa.me/916289006014" target="_blank" class="nav-drawer-social-btn" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+              <a href="{{ $settings->fb ?? '#' }}" class="nav-drawer-social-btn" aria-label="Facebook"
+                target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="{{ $settings->instagram ?? '#' }}" class="nav-drawer-social-btn" aria-label="Instagram"
+                target="_blank"><i class="fab fa-instagram"></i></a>
+              <a href="{{ $settings->linkedin ?? '#' }}" class="nav-drawer-social-btn" aria-label="LinkedIn"
+                target="_blank"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://wa.me/{{ $settings->whatsapp ?? '916289006014' }}" target="_blank"
+                class="nav-drawer-social-btn" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             </div>
           </div>
         </nav>
@@ -123,7 +134,8 @@
           <div class="footer-brand-logo">
             <img src="{{ asset('assets/images/logo/aerovia-logo-256.png') }}" alt="Aerovia Logo">
           </div>
-          <p>Built on a legacy of trust and committed to turning your aspirations into journeys that shape your future.</p>
+          <p>Built on a legacy of trust and committed to turning your aspirations into journeys that shape your future.
+          </p>
         </div>
 
         <div class="footer-nav-links">
@@ -138,9 +150,12 @@
           <h5>Socials</h5>
           <div style="display: flex; align-items: center; gap: 1.25rem;">
             <div class="social-icons-flex">
-              <a href="#" class="social-circle" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="social-circle" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#" class="social-circle" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="{{ $settings->fb ?? '#' }}" class="social-circle" aria-label="Facebook" target="_blank"><i
+                  class="fab fa-facebook-f"></i></a>
+              <a href="{{ $settings->linkedin ?? '#' }}" class="social-circle" aria-label="LinkedIn" target="_blank"><i
+                  class="fab fa-linkedin-in"></i></a>
+              <a href="{{ $settings->instagram ?? '#' }}" class="social-circle" aria-label="Instagram"
+                target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
             <!-- Go To Top Arrow Button -->
             <button class="back-to-top-btn" aria-label="Go to Top" title="Go to Top">
@@ -165,4 +180,5 @@
   <script src="{{ asset('assets/js/script.js') }}"></script>
   @stack('scripts')
 </body>
+
 </html>

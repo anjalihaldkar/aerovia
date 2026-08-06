@@ -115,8 +115,17 @@
                   style="position: absolute; top: 15px; left: 15px; background: rgba(0, 0, 0, 0.6); color: #FFF; padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; z-index: 2;">
                   {{ strtoupper(date('d M Y', strtotime($tour->start_date))) }}</span>
               @endif
-              <img loading="lazy" src="{{ (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) ? $tour->itinerary[0]['banner'] : 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80' }}"
-                alt="{{ $tour->title }}">
+              @php
+                $imgUrl = null;
+                if (!empty($tour->image)) {
+                    $imgUrl = asset('storage/' . $tour->image);
+                } elseif (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) {
+                    $imgUrl = $tour->itinerary[0]['banner'];
+                }
+              @endphp
+              @if($imgUrl)
+                <img loading="lazy" src="{{ $imgUrl }}" alt="{{ $tour->title }}">
+              @endif
             </div>
             <div class="tour-card-body">
               <div class="tour-card-header">
@@ -143,115 +152,17 @@
         tour.</p>
 
       <div class="accordion-grid-2col">
-        <div class="accordion-item active">
-          <div class="accordion-header">
-            <span>What is included in an Aerovia tour package?</span>
-            <i class="fas fa-chevron-up"></i>
+        @foreach($faqs as $faq)
+          <div class="accordion-item{{ $loop->first ? ' active' : '' }}">
+            <div class="accordion-header">
+              <span>{{ $faq->question }}</span>
+              <i class="fas fa-chevron-{{ $loop->first ? 'up' : 'down' }}"></i>
+            </div>
+            <div class="accordion-body">
+              {{ $faq->answer }}
+            </div>
           </div>
-          <div class="accordion-body">
-            Our packages include luxury accommodations, private airport transfers, curated guided tours, entry tickets,
-            daily breakfast, and 24/7 concierge assistance.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>Can I customize a pre-designed itinerary?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            Absolutely! Every tour package can be tailored to match your specific dates, preferred pace, dietary needs,
-            and hotel upgrades.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>How does the 'Pay Now' online payment system work?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            Our secure checkout allows instant credit/debit card, Apple Pay, and wire transfer payments with immediate
-            digital confirmation and itinerary delivery.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>What is Aerovia's trip cancellation & refund policy?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            Full refunds are issued for cancellations made 30 days prior to departure. Flexible rescheduling options are
-            available for unforeseen events.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>Do you assist with international travel visas?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            Yes, our dedicated visa concierges assist with e-visa applications, invitation letters, document
-            preparation, and embassy appointments worldwide.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>Are flights included in the package cost?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            We offer both land-only packages and full flight-inclusive options through our airline partner network at
-            competitive rates.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>What size are your group tours?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            We specialize in small-group expeditions (maximum 12–16 travelers) and 100% private tours to guarantee an
-            intimate, premium experience.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>Is travel insurance required for booking?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            While optional, we strongly recommend comprehensive travel insurance. We partner with leading global
-            insurers to provide instant coverage.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>What support is available during our trip?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            You will have a dedicated local travel manager and a 24/7 WhatsApp concierge helpline for immediate
-            assistance on the ground.
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header">
-            <span>Do you offer corporate or family group discounts?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="accordion-body">
-            Yes! Groups of 6 or more receive tier-based discounts, complimentary room upgrades, and custom private
-            banquet events.
-          </div>
-        </div>
+        @endforeach
       </div>
     </section>
 

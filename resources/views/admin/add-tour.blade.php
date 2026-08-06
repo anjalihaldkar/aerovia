@@ -31,7 +31,7 @@
       <button class="tab-btn" onclick="switchTab(4)">5. Terms & Docs</button>
     </div>
 
-    <form id="add-tour-form" method="POST"
+    <form id="add-tour-form" method="POST" enctype="multipart/form-data"
       action="{{ isset($tour) ? route('tours.update', $tour->id) : route('tours.store') }}">
       @csrf
       @if(isset($tour))
@@ -53,6 +53,22 @@
               <label class="field-label" for="tour-subtitle">Sub-text / Routing Overview</label>
               <textarea id="tour-subtitle" name="subtitle" class="field-input"
                 placeholder="e.g. Warsaw • Krakow • Zakopane • Prague...">{{ old('subtitle', $tour->subtitle ?? '') }}</textarea>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label class="field-label">Tour Package Thumbnail Image</label>
+              <div class="media-upload-row">
+                <div class="upload-dropzone" onclick="document.getElementById('tour-image-file').click()">
+                  <i class="fas fa-image"></i>
+                  <span>Choose Thumbnail Image</span>
+                  <input type="file" id="tour-image-file" name="image" class="file-input-hidden" accept="image/*" onchange="previewMedia(this, 'preview-tour-thumbnail')">
+                </div>
+                <div class="preview-container">
+                  <img class="preview-media" id="preview-tour-thumbnail" src="{{ (isset($tour) && $tour->image) ? asset('storage/' . $tour->image) : asset('assets/images/tours-hero.webp') }}"
+                    alt="Tour Thumbnail" style="max-height: 100px;">
+                  <div class="preview-label-tag">Thumbnail</div>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -322,18 +338,39 @@
     </div>
   </div>
 
-  @if(isset($tour) && is_array($tour->itinerary) && count($tour->itinerary) > 0)
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        // Clear dynamic itinerary first
-        const container = document.getElementById('dynamic-itinerary-container');
-        if (container) {
-          container.innerHTML = '';
-          @foreach($tour->itinerary as $day)
-            addNewItineraryDay("{{ addslashes($day['title'] ?? '') }}", "{{ addslashes($day['banner'] ?? '') }}", "{{ str_replace(["\r", "\n"], ['', '\n'], addslashes($day['description'] ?? '')) }}");
-          @endforeach
-                                                                          }
-      });
-    </script>
-  @endif
+@section('scripts')
+<script>
+  function previewMedia(input, previewId) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Error: Please select a valid image file.');
+        input.value = '';
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Error: Image file size cannot exceed 2MB.');
+        input.value = '';
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      document.getElementById(previewId).src = url;
+    }
+  }
+</script>
+@if(isset($tour) && is_array($tour->itinerary) && count($tour->itinerary) > 0)
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Clear dynamic itinerary first
+      const container = document.getElementById('dynamic-itinerary-container');
+      if (container) {
+        container.innerHTML = '';
+        @foreach($tour->itinerary as $day)
+          addNewItineraryDay("{{ addslashes($day['title'] ?? '') }}", "{{ addslashes($day['banner'] ?? '') }}", "{{ str_replace(["\r", "\n"], ['', '\n'], addslashes($day['description'] ?? '')) }}");
+        @endforeach
+      }
+    });
+  </script>
+@endif
+@endsection
 @endsection

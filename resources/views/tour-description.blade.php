@@ -5,14 +5,25 @@
 
 @section('content')
     @php
-      $siteSettings = \App\Models\Setting::first();
-      $whatsappNumber = preg_replace('/[^0-9]/', '', $siteSettings->whatsapp ?? '916289006014');
+      $whatsappNumber = preg_replace('/[^0-9]/', '', $settings->whatsapp ?? '916289006014');
       $whatsappUrl = "https://wa.me/" . $whatsappNumber . "?text=" . urlencode("Hi Aerovia, I want to Reserve a seat for the " . $tour->title . " Tour");
     @endphp
 
     <!-- Hero Card Banner with Background Video & Parallax -->
     <div class="hero-card-banner">
-      <img src="{{ (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) ? $tour->itinerary[0]['banner'] : 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=1920&q=80' }}" class="hero-image-bg" alt="Hero Background">
+      @php
+        $heroImgUrl = null;
+        if (!empty($tour->image)) {
+            $heroImgUrl = asset('storage/' . $tour->image);
+        } elseif (isset($tour->itinerary) && count($tour->itinerary) > 0 && !empty($tour->itinerary[0]['banner'])) {
+            $heroImgUrl = $tour->itinerary[0]['banner'];
+        }
+
+        if (!$heroImgUrl || str_contains($heroImgUrl, 'unsplash.com')) {
+            $heroImgUrl = isset($settings->tours_banner) ? asset('storage/' . $settings->tours_banner) : asset('assets/images/tours-hero.webp');
+        }
+      @endphp
+      <img src="{{ $heroImgUrl }}" class="hero-image-bg" alt="Hero Background">
       <div class="hero-img-overlay"></div>
 
       <!-- Hero Main Content -->

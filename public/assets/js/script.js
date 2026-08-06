@@ -424,44 +424,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedContact = JSON.parse(localStorage.getItem('aerovia_contact_settings'));
     if (savedContact) {
       updateContactTexts(savedContact);
-      updateSocialLinks(savedContact);
+      // updateSocialLinks(savedContact); // Disabled in favor of Laravel database storage
     }
 
-    // 2. Load custom FAQs
-    const customFaqs = JSON.parse(localStorage.getItem('aerovia_faqs'));
-    const faqGrid = document.querySelector('.accordion-grid-2col');
-    if (customFaqs && customFaqs.length > 0 && faqGrid) {
-      faqGrid.innerHTML = '';
-      customFaqs.forEach((faq, index) => {
-        const activeClass = index === 0 ? 'active' : '';
-        const iconClass = index === 0 ? 'fa-chevron-up' : 'fa-chevron-down';
-        const item = document.createElement('div');
-        item.className = `accordion-item ${activeClass}`;
-        item.innerHTML = `
-          <div class="accordion-header">
-            <span>${faq.question}</span>
-            <i class="fas ${iconClass}"></i>
-          </div>
-          <div class="accordion-body">
-            ${faq.answer}
-          </div>
-        `;
-
-        // Wire up event listener for accordion toggle
-        const header = item.querySelector('.accordion-header');
-        header.addEventListener('click', () => {
-          const parent = header.parentElement;
-          const isActive = parent.classList.contains('active');
-          parent.classList.toggle('active');
-          const icon = header.querySelector('i');
-          if (icon) {
-            icon.className = isActive ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
-          }
-        });
-
-        faqGrid.appendChild(item);
-      });
-    }
+    // 2. Load custom FAQs (Removed localstorage override to let Laravel handle it dynamically)
 
     // 3. Load custom Testimonials (Disabled in favor of database storage)
     /*

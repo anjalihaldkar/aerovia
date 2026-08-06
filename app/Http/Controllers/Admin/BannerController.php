@@ -13,8 +13,13 @@ class BannerController extends Controller
     {
         $settings = Gallery::pluck('value', 'key')->toArray();
         $sceneryList = isset($settings['scenery_images']) ? json_decode($settings['scenery_images'], true) : [];
-        $tours = \App\Models\Tour::all();
         
+        // Filter out default Unsplash images to only display custom user scenery cards
+        $sceneryList = array_values(array_filter($sceneryList, function($item) {
+            return isset($item['image']) && !str_starts_with($item['image'], 'https://images.unsplash.com/');
+        }));
+
+        $tours = \App\Models\Tour::all();
         return view('admin.banner-details', compact('settings', 'sceneryList', 'tours'));
     }
 
@@ -63,8 +68,8 @@ class BannerController extends Controller
                 $imagePath = $item['image_url'] ?? ''; // Existing URL
                 
                 // If a new file was uploaded for this scenery item
-                if (isset($sceneryFiles[$index]['file'])) {
-                    $file = $sceneryFiles[$index]['file'];
+                if ($request->hasFile("scenery.{$index}.file")) {
+                    $file = $request->file("scenery.{$index}.file");
                     $imagePath = $file->store('banners', 'public');
                 }
                 
@@ -73,6 +78,15 @@ class BannerController extends Controller
                     'subtitle' => $item['subtitle'] ?? '',
                     'image' => $imagePath
                 ];
+
+                // Link image path to Tour package by matching title
+                $title = trim($item['title'] ?? '');
+                if (!empty($title)) {
+                    $tour = \App\Models\Tour::where('title', $title)->first();
+                    if ($tour) {
+                        $tour->update(['image' => $imagePath]);
+                    }
+                }
             }
             
             Gallery::updateOrCreate(

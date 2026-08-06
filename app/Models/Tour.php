@@ -9,6 +9,7 @@ class Tour extends Model
     protected $fillable = [
         'title',
         'subtitle',
+        'image',
         'duration',
         'accommodation',
         'start_date',

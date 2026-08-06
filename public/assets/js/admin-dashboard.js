@@ -469,22 +469,10 @@ function saveTestimonials() {
 // AEROVIA MULTIPLE SCENERY BANNER LOGIC
 // ==========================================
 
-const defaultScenery = [
-  { title: "Poland & Czechia", subtitle: "10D/11N Expedition • Oct 15", image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fm=webp&fit=crop&w=800&q=80" },
-  { title: "Ubud, Bali", subtitle: "Cliffside Temples & Sunsets", image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fm=webp&fit=crop&w=800&q=80" },
-  { title: "Norway Fjords", subtitle: "Fjord Cruise & Aurora", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fm=webp&fit=crop&w=800&q=80" },
-  { title: "Swiss Alps", subtitle: "Mount Titlis & Lucerne", image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fm=webp&fit=crop&w=800&q=80" },
-  { title: "Japan Kyoto", subtitle: "Cherry Blossom Trail", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fm=webp&fit=crop&w=800&q=80" },
-  { title: "Angkor Wat", subtitle: "Ancient Heritage Trail", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fm=webp&fit=crop&w=800&q=80" }
-];
-
 let sceneryList = [];
 
 function loadSceneryItems() {
-  sceneryList = JSON.parse(localStorage.getItem('aerovia_scenery'));
-  if (!sceneryList || sceneryList.length === 0) {
-    sceneryList = [...defaultScenery];
-  }
+  sceneryList = window.serverSceneryList || [];
   renderSceneryItems();
 }
 
@@ -494,6 +482,10 @@ function renderSceneryItems() {
 
   container.innerHTML = '';
   sceneryList.forEach((scenery, index) => {
+    let previewImg = scenery.image || '';
+    if (previewImg && !previewImg.startsWith('http') && !previewImg.startsWith('data:') && !previewImg.startsWith('blob:')) {
+      previewImg = '/storage/' + previewImg;
+    }
     const card = document.createElement('div');
     card.className = 'editor-card-item scenery-editor-box';
     card.id = `scenery-box-${index}`;
@@ -505,13 +497,12 @@ function renderSceneryItems() {
       
       <div class="form-grid-2" style="gap: 0.75rem;">
         <div class="form-group form-group-full">
-          <label class="field-label" style="opacity: 0.6; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Linked Tour</label>
-          <div style="font-weight: 700; color: #FFF; font-size: 1rem;">${scenery.title}</div>
-          <div style="font-size: 0.85rem; color: var(--star-gold); margin-top: 0.2rem; font-weight: 500;">${scenery.subtitle}</div>
-          
-          <!-- Hidden inputs to submit title and subtitle safely -->
-          <input type="hidden" class="scenery-title-input" name="scenery[${index}][title]" value="${scenery.title}">
-          <input type="hidden" class="scenery-subtitle-input" name="scenery[${index}][subtitle]" value="${scenery.subtitle}">
+          <label class="field-label">Scenery Title</label>
+          <input type="text" class="field-input scenery-title-input" name="scenery[${index}][title]" placeholder="e.g. Poland & Czechia" value="${scenery.title}">
+        </div>
+        <div class="form-group form-group-full">
+          <label class="field-label">Scenery Subtitle / Route</label>
+          <input type="text" class="field-input scenery-subtitle-input" name="scenery[${index}][subtitle]" placeholder="e.g. 10D/11N Expedition" value="${scenery.subtitle}">
         </div>
         <div class="form-group form-group-full">
           <label class="field-label">Scenery Image URL / Upload File</label>
@@ -522,7 +513,7 @@ function renderSceneryItems() {
               <input type="file" id="scenery-file-input-${index}" name="scenery[${index}][file]" class="file-input-hidden" accept="image/*" onchange="handleSceneryFileSelect(this, ${index})">
             </div>
             <div class="preview-container" style="height: 75px; width: 120px; flex-shrink: 0;">
-              <img class="preview-media" id="scenery-preview-${index}" src="${scenery.image}" alt="Scenery Preview">
+              <img class="preview-media" id="scenery-preview-${index}" src="${previewImg}" alt="Scenery Preview">
             </div>
           </div>
           <input type="text" id="scenery-url-${index}" name="scenery[${index}][image_url]" class="field-input scenery-image-url" style="margin-top: 0.5rem;" placeholder="Or paste image web URL..." value="${scenery.rawUrl || scenery.image}">
@@ -596,14 +587,24 @@ function syncSceneryListFromDOM() {
 
 // Save banner details action
 function saveBannerAssets() {
-  // Save custom scenery items if we are editing them
-  if (document.getElementById('scenery-editor-container')) {
-    syncSceneryListFromDOM();
-    localStorage.setItem('aerovia_scenery', JSON.stringify(sceneryList));
-  }
+  const form = document.getElementById('banner-details-form');
+  if (form) {
+    // Dynamically re-index all inputs inside scenery-editor-container first
+    const sceneryBoxes = form.querySelectorAll('.scenery-editor-box');
+    sceneryBoxes.forEach((box, idx) => {
+      const titleInput = box.querySelector('.scenery-title-input');
+      const subtitleInput = box.querySelector('.scenery-subtitle-input');
+      const fileInput = box.querySelector('input[type="file"]');
+      const urlInput = box.querySelector('.scenery-image-url');
 
-  const modalDesc = document.getElementById('publish-modal-desc');
-  const successModal = document.getElementById('success-modal');
-  if (modalDesc) modalDesc.innerHTML = "The chosen header banner images, background video files, and scenery & landscapes galleries have been simulated as saved successfully.";
-  if (successModal) successModal.style.display = 'flex';
+      if (titleInput) titleInput.setAttribute('name', `scenery[${idx}][title]`);
+      if (subtitleInput) subtitleInput.setAttribute('name', `scenery[${idx}][subtitle]`);
+      if (fileInput) fileInput.setAttribute('name', `scenery[${idx}][file]`);
+      if (urlInput) urlInput.setAttribute('name', `scenery[${idx}][image_url]`);
+    });
+
+    if (form.reportValidity()) {
+      form.submit();
+    }
+  }
 }

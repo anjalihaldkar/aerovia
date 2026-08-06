@@ -25,9 +25,6 @@ class TourController extends Controller
         return view('admin.add-tour');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -37,9 +34,13 @@ class TourController extends Controller
             'price_sharing' => 'required|integer|min:0',
             'price_single' => 'nullable|integer|min:0',
             'inst_deposit' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
         
         $data = $request->except(['_token', '_method']);
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('tours', 'public');
+        }
         
         // Reformat itinerary array to be a proper JSON object list
         $itinerary = [];
@@ -79,9 +80,6 @@ class TourController extends Controller
         return view('admin.add-tour', compact('tour'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Tour $tour)
     {
         $validated = $request->validate([
@@ -91,9 +89,13 @@ class TourController extends Controller
             'price_sharing' => 'required|integer|min:0',
             'price_single' => 'nullable|integer|min:0',
             'inst_deposit' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
         
         $data = $request->except(['_token', '_method']);
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('tours', 'public');
+        }
         
         // Reformat itinerary array to be a proper JSON object list
         $itinerary = [];

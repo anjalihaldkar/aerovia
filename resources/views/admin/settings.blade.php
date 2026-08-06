@@ -29,26 +29,17 @@
               
               <div class="form-group">
                 <label class="field-label">Mobile / Phone Number</label>
-                <input type="tel" id="setting-phone" name="phone" class="field-input @error('phone') is-invalid @enderror" placeholder="e.g. +91 62890 06014" value="{{ old('phone', $settings->phone ?? '') }}" required pattern="^\+?[0-9\s\-]{10,20}$" title="Please enter a valid phone number (minimum 10 digits)." @error('phone') style="border-color: #ef4444;" @enderror>
-                @error('phone')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
+                <input type="tel" id="setting-phone" name="phone" class="field-input" placeholder="e.g. +91 62890 06014" value="{{ $settings->phone ?? '' }}" required pattern="^\+?[0-9\s\-]{10,20}$" title="Please enter a valid phone number (minimum 10 digits).">
               </div>
 
               <div class="form-group">
                 <label class="field-label">Email Address</label>
-                <input type="email" id="setting-email" name="email" class="field-input @error('email') is-invalid @enderror" placeholder="e.g. info@aeroviaexpeditions.com" value="{{ old('email', $settings->email ?? '') }}" required @error('email') style="border-color: #ef4444;" @enderror>
-                @error('email')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
+                <input type="email" id="setting-email" name="email" class="field-input" placeholder="e.g. info@aeroviaexpeditions.com" value="{{ $settings->email ?? '' }}" required>
               </div>
 
               <div class="form-group form-group-full">
                 <label class="field-label">Office Address</label>
-                <input type="text" id="setting-address" name="address" class="field-input @error('address') is-invalid @enderror" placeholder="e.g. 127A Park Street, Kolkata - 700016" value="{{ old('address', $settings->address ?? '') }}" required minlength="10" title="Please enter a complete office address (minimum 10 characters)." @error('address') style="border-color: #ef4444;" @enderror>
-                @error('address')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
+                <input type="text" id="setting-address" name="address" class="field-input" placeholder="e.g. 127A Park Street, Kolkata - 700016" value="{{ $settings->address ?? '' }}" required minlength="10" title="Please enter a complete office address (minimum 10 characters).">
               </div>
 
             </div>
@@ -63,44 +54,32 @@
                 <label class="field-label">Facebook Profile Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-facebook-f social-brand-icon"></i>
-                  <input type="url" id="setting-fb" name="fb" class="field-input" placeholder="https://www.facebook.com/username" value="{{ old('fb', $settings->fb ?? '') }}" @error('fb') style="border-color: #ef4444;" @enderror>
+                  <input type="url" id="setting-fb" name="fb" class="field-input" placeholder="https://www.facebook.com/username" value="{{ $settings->fb ?? '' }}">
                 </div>
-                @error('fb')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
               </div>
 
               <div class="form-group">
                 <label class="field-label">LinkedIn Page Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-linkedin-in social-brand-icon"></i>
-                  <input type="url" id="setting-linkedin" name="linkedin" class="field-input" placeholder="https://www.linkedin.com/company/username" value="{{ old('linkedin', $settings->linkedin ?? '') }}" @error('linkedin') style="border-color: #ef4444;" @enderror>
+                  <input type="url" id="setting-linkedin" name="linkedin" class="field-input" placeholder="https://www.linkedin.com/company/username" value="{{ $settings->linkedin ?? '' }}">
                 </div>
-                @error('linkedin')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
               </div>
 
               <div class="form-group">
                 <label class="field-label">Instagram Username Link</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-instagram social-brand-icon"></i>
-                  <input type="url" id="setting-instagram" name="instagram" class="field-input" placeholder="https://www.instagram.com/username" value="{{ old('instagram', $settings->instagram ?? '') }}" @error('instagram') style="border-color: #ef4444;" @enderror>
+                  <input type="url" id="setting-instagram" name="instagram" class="field-input" placeholder="https://www.instagram.com/username" value="{{ $settings->instagram ?? '' }}">
                 </div>
-                @error('instagram')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
               </div>
 
               <div class="form-group">
                 <label class="field-label">WhatsApp Number (For Click-to-Chat - digits only, country code included)</label>
                 <div class="social-input-wrapper">
                   <i class="fab fa-whatsapp social-brand-icon"></i>
-                  <input type="text" id="setting-whatsapp" name="whatsapp" class="field-input" placeholder="e.g. 916289006014" value="{{ old('whatsapp', $settings->whatsapp ?? '') }}" pattern="^[0-9]{10,15}$" title="Please enter a valid WhatsApp number (digits only, including country code, e.g. 916289006014)" @error('whatsapp') style="border-color: #ef4444;" @enderror>
+                  <input type="text" id="setting-whatsapp" name="whatsapp" class="field-input" placeholder="e.g. 916289006014" value="{{ $settings->whatsapp ?? '' }}" pattern="^[0-9]{10,15}$" title="Please enter a valid WhatsApp number (digits only, including country code, e.g. 916289006014)">
                 </div>
-                @error('whatsapp')
-                  <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ $message }}</span>
-                @enderror
               </div>
 
             </div>

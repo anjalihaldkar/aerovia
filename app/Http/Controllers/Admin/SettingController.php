@@ -24,6 +24,11 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->has('whatsapp') && !empty($request->input('whatsapp'))) {
+            $cleaned = preg_replace('/[^0-9]/', '', $request->input('whatsapp'));
+            $request->merge(['whatsapp' => $cleaned]);
+        }
+
         $request->validate([
             'phone' => ['required', 'string', 'regex:/^\+?[0-9\s\-]{10,20}$/'],
             'email' => 'required|email|max:255',
