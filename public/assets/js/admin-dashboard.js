@@ -126,7 +126,7 @@ window.addEventListener('resize', () => {
 // Logout Function
 function performLogout() {
   localStorage.removeItem('aerovia_admin_logged');
-  window.location.href = 'login.html';
+  window.location.href = '/admin/login';
 }
 
 // Switch Tabs in Tour Editor Form
@@ -310,7 +310,7 @@ function updateRowCounter() {
 // Simulated Edit Action
 function editTourAction(tourName) {
   alert(`Simulation: Loading "${tourName}" details into the editor form...`);
-  window.location.href = 'add-tour.html';
+  window.location.href = '/admin/tours/create';
 }
 
 
